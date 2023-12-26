@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model companies {
+  company_id      Int      @id @unique(map: "company_id") @default(autoincrement())
+  company_name    String?  @db.VarChar(255)
+  company_address String?  @db.VarChar(255)
+  company_email   String?  @db.VarChar(255)
+  company_phone   String?  @db.VarChar(255)
+  company_deleted Boolean?
+  users           users[]
+}
+
+model departments {
+  departments_id   Int     @id @unique(map: "departments_id") @default(autoincrement())
+  departments_name String? @db.VarChar(255)
+  users            users[]
+}
+
+model position {
+  position_id   Int     @id @unique(map: "position_id") @default(autoincrement())
+  position_name String? @db.VarChar(255)
+  users         users[]
+}
+
+model users {
+  user_id       Int          @id @default(autoincrement())
+  user_name     String?      @db.VarChar(255)
+  email         String       @db.VarChar(255)
+  phone         String?      @db.VarChar(255)
+  password      String       @db.VarChar(255)
+  user_deleted  Boolean?
+  position_id   Int?
+  company_id    Int?
+  department_id Int?
+  roles_name    String       @db.VarChar(255)
+  leave_form    leave_form[]
+  companies     companies?   @relation(fields: [company_id], references: [company_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  position      position?    @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_2")
+  departments   departments? @relation(fields: [department_id], references: [departments_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_3")
+
+  @@index([company_id], map: "company_id")
+  @@index([department_id], map: "department_id")
+  @@index([position_id], map: "position_id")
+}
+
+model leave_form {
+  Leave_form_id       Int      @id @default(autoincrement())
+  Leave_form_quantity Int?
+  discription         String?  @db.VarChar(255)
+  status              Boolean?
+  Leave_form_deleted  Boolean?
+  user_id             Int
+  users               users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "leave_form_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
