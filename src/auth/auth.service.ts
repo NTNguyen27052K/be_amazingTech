@@ -31,7 +31,8 @@ export class AuthService {
         { data: userData },
         { expiresIn: '5d', secret: 'NTN' },
       );
-      return token;
+
+      return { accessToken: token };
     } catch (error) {
       return error;
     }

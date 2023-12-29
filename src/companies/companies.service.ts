@@ -9,6 +9,7 @@ export class CompaniesService {
   async getAllCompanies() {
     return await this.prisma.companies.findMany();
   }
+
   create(createCompanyDto: CreateCompanyDto) {
     return 'This action adds a new company';
   }
@@ -17,8 +18,19 @@ export class CompaniesService {
     return `This action returns all companies`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  async getAllUsersByCompanyId(id: number) {
+    const usersByCompanyId = await this.prisma.users.findMany({
+      where: {
+        company_id: id,
+      },
+      include: {
+        companies: true,
+        position: true,
+        departments: true,
+        leave_form: true,
+      },
+    });
+    return usersByCompanyId;
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {

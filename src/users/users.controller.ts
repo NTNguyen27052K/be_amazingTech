@@ -7,26 +7,28 @@ import {
   Param,
   Delete,
   UseGuards,
-  SetMetadata,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Roles } from 'src/auth/rbac/decorater/roles.decorators';
-import { Role } from 'src/auth/rbac/emun/roles.enum';
-import { AuthGuard } from 'src/auth/rbac/guards/auth.guard';
-import { RoleGuard } from 'src/auth/rbac/guards/roles.guard';
+
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/get-users')
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthGuard, RoleGuard)
   getUsers() {
     return this.usersService.getAllUsers();
   }
+  @Post('/updateUsers/:id')
+  updateUsers(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto);
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -40,11 +42,6 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
