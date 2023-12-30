@@ -12,15 +12,18 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { RolesGuard } from 'src/auth/role/roles.guard';
+import { Roles } from 'src/auth/role/roles.decorator';
+import { Role } from 'src/auth/role/role.enum';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('/get-users')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   getUsers() {
     return this.usersService.getAllUsers();
   }

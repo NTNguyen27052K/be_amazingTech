@@ -27,14 +27,11 @@ export class AuthService {
       if (!(userData.password === password)) {
         return 'Mật khẩu không chính xác';
       }
-      let token = await this.jwtService.signAsync(
-        { data: userData },
-        { expiresIn: '5d', secret: 'NTN' },
-      );
-
-      return { accessToken: token };
+      return {
+        access_token: await this.jwtService.signAsync(userData),
+      };
     } catch (error) {
-      return error;
+      return { error: error };
     }
   }
 }

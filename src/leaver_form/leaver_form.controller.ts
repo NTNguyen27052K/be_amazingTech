@@ -21,7 +21,7 @@ export class LeaverFormController {
     return this.leaverFormService.getAllLeaveFormsByCompanyId(id);
   }
   @Put('/updateLeaverForm/:id')
-  updateLeaverForm(@Param('id') id: number, @Body() updateLeaverForm: any) {
+  updateLeaverForm(@Param('id') id: number, @Body() updateLeaverForm: UpdateLeaverFormDto) {
     return this.leaverFormService.updateLeaverForm(id, updateLeaverForm);
   }
 

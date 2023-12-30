@@ -9,7 +9,7 @@ import { DepartmentsModule } from './departments/departments.module';
 import { AuthModule } from './auth/auth.module';
 
 import { ConfigModule } from '@nestjs/config';
-import { JwtStrategy } from './strategy/jwt.strategy';
+
 import { LeaverFormModule } from './leaver_form/leaver_form.module';
 
 @Module({
@@ -23,6 +23,6 @@ import { LeaverFormModule } from './leaver_form/leaver_form.module';
     LeaverFormModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtStrategy],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -23,6 +23,18 @@ model departments {
   users            users[]
 }
 
+model leave_form {
+  Leave_form_id       Int      @id @default(autoincrement())
+  Leave_form_quantity Int?
+  discription         String?  @db.VarChar(255)
+  status              Boolean?
+  Leave_form_deleted  Boolean?
+  user_id             Int
+  users               users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "leave_form_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
 model position {
   position_id   Int     @id @unique(map: "position_id") @default(autoincrement())
   position_name String? @db.VarChar(255)
@@ -48,16 +60,4 @@ model users {
   @@index([company_id], map: "company_id")
   @@index([department_id], map: "department_id")
   @@index([position_id], map: "position_id")
-}
-
-model leave_form {
-  Leave_form_id       Int      @id @default(autoincrement())
-  Leave_form_quantity Int?
-  discription         String?  @db.VarChar(255)
-  status              Boolean?
-  Leave_form_deleted  Boolean?
-  user_id             Int
-  users               users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "leave_form_ibfk_1")
-
-  @@index([user_id], map: "user_id")
 }

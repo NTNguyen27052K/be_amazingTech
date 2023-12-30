@@ -31,7 +31,7 @@ export class LeaverFormService {
   findOne(id: number) {
     return `This action returns a #${id} leaverForm`;
   }
-
+z
   async updateLeaverForm(id: number, updateLeaverFormDto: UpdateLeaverFormDto) {
     try {
       const updatedUser = await this.prisma.leave_form.update({
