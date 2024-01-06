@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Put,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,18 +22,28 @@ import { Role } from 'src/auth/role/role.enum';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard)
   @Get('/get-users')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
   getUsers() {
     return this.usersService.getAllUsers();
   }
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post('/updateUsers/:id')
   updateUsers(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(id, updateUserDto);
+    try {
+      return this.usersService.updateUser(id, updateUserDto);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        return { message: 'Không có quyền truy cập!' };
+      }
+      throw error; // Re-throw các lỗi khác không phải là UnauthorizedException
+    }
   }
 
-  @Post()
+  @UseGuards(AuthGuard)
+  @Post('/createUser')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

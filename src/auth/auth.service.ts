@@ -27,8 +27,16 @@ export class AuthService {
       if (!(userData.password === password)) {
         return 'Mật khẩu không chính xác';
       }
+      // console.log(userData);
       return {
         access_token: await this.jwtService.signAsync(userData),
+        user_name: userData.user_name,
+        email: userData.email,
+        phone: userData.phone,
+        position_id: userData.position_id,
+        company_id: userData.company_id,
+        department_id: userData.department_id,
+        roles_name: userData.roles_name,
       };
     } catch (error) {
       return { error: error };

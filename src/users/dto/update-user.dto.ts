@@ -11,7 +11,7 @@ export class UpdateUserDto {
   position_id: number;
   company_id: number;
   department_id: number;
-  roles_name: number;
+  roles_name: string;
   constructor(
     user_id: number,
     user_name: string,
@@ -22,7 +22,7 @@ export class UpdateUserDto {
     position_id: number,
     company_id: number,
     department_id: number,
-    roles_name: number,
+    roles_name: string,
   ) {
     user_id;
     user_name;

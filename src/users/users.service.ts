@@ -26,9 +26,9 @@ export class UsersService {
           phone: updateUserDto.phone,
           password: updateUserDto.password,
           user_deleted: updateUserDto.user_deleted,
-          position_id: updateUserDto.position_id,
-          company_id: updateUserDto.company_id,
-          department_id: updateUserDto.department_id,
+          position_id: Number(updateUserDto.position_id),
+          company_id: Number(updateUserDto.company_id),
+          department_id: Number(updateUserDto.department_id),
         },
       });
 
@@ -37,8 +37,27 @@ export class UsersService {
       throw new Error(`Could not update user deleted status: ${error.message}`);
     }
   }
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const newUser = await this.prisma.users.create({
+        data: {
+          user_name: createUserDto.user_name,
+          email: createUserDto.email,
+          phone: createUserDto.phone,
+          password: createUserDto.password,
+          user_deleted: createUserDto.user_deleted,
+          position_id: Number(createUserDto.position_id),
+          company_id: Number(createUserDto.company_id),
+          department_id: Number(createUserDto.department_id),
+          roles_name: createUserDto.roles_name,
+        },
+      });
+      return newUser;
+    } catch (error) {
+      console.error('Error creating user:', error);
+    } finally {
+      await this.prisma.$disconnect();
+    }
   }
 
   findAll() {

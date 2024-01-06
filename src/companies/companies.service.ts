@@ -18,7 +18,18 @@ export class CompaniesService {
     return `This action returns all companies`;
   }
 
-  async getAllUsersByCompanyId(id: number) {
+  async getAllUsersByCompanyId(id: number | undefined) {
+    if (!id || id === 0) {
+      return await this.prisma.users.findMany({
+        include: {
+          companies: true,
+          position: true,
+          departments: true,
+          leave_form: true,
+        },
+      });
+    }
+
     const usersByCompanyId = await this.prisma.users.findMany({
       where: {
         company_id: id,
@@ -30,6 +41,7 @@ export class CompaniesService {
         leave_form: true,
       },
     });
+
     return usersByCompanyId;
   }
 

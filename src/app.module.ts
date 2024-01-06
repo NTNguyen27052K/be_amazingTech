@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 
 import { LeaverFormModule } from './leaver_form/leaver_form.module';
+import { SalariesModule } from './salaries/salaries.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { LeaverFormModule } from './leaver_form/leaver_form.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     LeaverFormModule,
+    SalariesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -53,6 +53,7 @@ model users {
   department_id Int?
   roles_name    String       @db.VarChar(255)
   leave_form    leave_form[]
+  salary        salary[]
   companies     companies?   @relation(fields: [company_id], references: [company_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
   position      position?    @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_2")
   departments   departments? @relation(fields: [department_id], references: [departments_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_3")
@@ -60,4 +61,17 @@ model users {
   @@index([company_id], map: "company_id")
   @@index([department_id], map: "department_id")
   @@index([position_id], map: "position_id")
+}
+
+model salary {
+  salary_id        Int      @id @default(autoincrement())
+  base_salary      String?  @db.VarChar(255)
+  subsidies_salary String?  @db.VarChar(255)
+  working_days     String?  @db.VarChar(255)
+  salary_deleted   Boolean?
+  salary           String?  @db.VarChar(255)
+  user_id          Int
+  users            users    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "salary_ibfk_1")
+
+  @@index([user_id], map: "user_id")
 }
